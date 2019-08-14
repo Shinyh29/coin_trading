@@ -1,0 +1,41 @@
+import pyupbit
+import numpy as np
+import matplotlib.pyplot as plt
+%matplotlib inline
+    
+df = pyupbit.get_ohlcv("KRW-BTC")
+df['range'] = (df['high'] - df['low']) * 0.5
+df['target'] = df['open'] + df['range'].shift(1)
+
+fee = 0.0032
+df['ror'] = np.where(df['high'] > df['target'], df['close'] / df['target'] - fee,  1)
+
+
+df['hpr'] = df['ror'].cumprod()
+df['dd'] = (df['hpr'].cummax() - df['hpr']) / df['hpr'].cummax()
+(df['hpr']-1).plot()
+# ['hpr'] 은 전략 누적수익률
+# ['ror'] 은 전략의 일간수익률
+#df['dd'].plot()
+
+#단순 100% 매수후 보유전략
+((1+df['close'].pct_change()).cumprod()-1).plot()
+
+print("MDD(%): ", df['dd'].max()*100)
+
+#####-----------------------------------------------------------------------------------------
+##### MDD(%):  6.123210452966378--------------------------------------------------------------
+
+
+
+
+df['dd2'] = (((1+df['close'].pct_change()).cumprod()-1).cummax() - ((1+df['close'].pct_change()).cumprod()-1)) / ((1+df['close'].pct_change()).cumprod()-1).cummax()
+
+print(df['dd2'].max()*100)
+
+
+
+
+#-------------------------------------------------------------------------------------
+
+df['dd2'] = (((1+df['close'].pct_change()).cumprod()-1).cummax() - ((1+df['close'].pct_change()).cumprod()-1)) / ((1+df['close'].pct_change()).cumprod()-1).cummax();print(df['dd2'].max()*100)
