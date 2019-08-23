@@ -5,7 +5,9 @@ import FinanceDataReader as fdr
 
 ticker = 'BTC/KRW'
 df = fdr.DataReader(ticker, '2018')
-
+# 최근부터  보기싫은 일자 Date 숫자로 전달 n 
+n = 150
+df = df[:-n]
 
 def get_macd(df , short = 12 , long = 26, t=9):
     df = pd.DataFrame(df)
