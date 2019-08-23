@@ -3,8 +3,8 @@ import numpy as np
 import FinanceDataReader as fdr
 %matplotlib inline
 
-ticker = 'NFLX'
-df = fdr.DataReader(ticker, '2013')
+ticker = '068270'
+df = fdr.DataReader(ticker, '2018')
 
 
 def get_macd(df , short = 12 , long = 26, t=9):
@@ -29,7 +29,8 @@ df['Zeros'] = 0
 
 df['osc_on'] = np.where(df['macdo'] > df['Zeros'], df['Change']+1, 1)
 df['osc_on'].cumprod().plot()
-print(df.head())
+print("Today_macdo : ",  df['macdo'][-1])
+print(df.tail())
 (df['Change']+1).cumprod().plot()
 # Out[19]: <matplotlib.axes._subplots.AxesSubplot at 0x9f26550>
 
