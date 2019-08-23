@@ -3,7 +3,7 @@ import numpy as np
 import FinanceDataReader as fdr
 %matplotlib inline
 
-ticker = '068270'
+ticker = 'BTC/KRW'
 df = fdr.DataReader(ticker, '2018')
 
 
@@ -26,13 +26,16 @@ df_macdplus = get_macd(df)
 df = df_macdplus
 df['Zeros'] = 0
 
-
-df['osc_on'] = np.where(df['macdo'] > df['Zeros'], df['Change']+1, 1)
+# 전일자 의 macdo 가 0보다 크다면,  오늘자의 Change 상승률 Long포지션
+# "" 0보다 작다면, 오늘자의 Change 상승률 포지션은 현금보유(전량매도) ==1
+df['osc_on'] = np.where(df['macdo'].shift(-1) > df['Zeros'], df['Change']+1, 1)
 df['osc_on'].cumprod().plot()
-print("Today_macdo : ",  df['macdo'][-1])
+## 지금보여주는 마지막 row(오늘자) 보다 하루전날(전일자)것 == 뒤에서두번째열 df['macdo'][-2]
+print("어제의_macdo : ",  df['macdo'][-2])
+print("어제의_macdo : ",  np.where(df['macdo'][-2]>0, 'Long포지션', 'Put or Cash포지션'))
 print(df.tail())
 (df['Change']+1).cumprod().plot()
-# Out[19]: <matplotlib.axes._subplots.AxesSubplot at 0x9f26550>
+# Out[19]: <matplotlib.axes._subplots.AxesSubplot at 0x9f26550>'''
 
 
 
