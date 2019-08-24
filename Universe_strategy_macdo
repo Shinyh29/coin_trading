@@ -79,3 +79,8 @@ pd.Series(universe)  ## 세로형
 pd.DataFrame(universe, index = range(0,1)) ## 가로형
 ## 만든 universe 사전의 데이터프레임화 
 ## pd.DataFrame(universe, index = range(0,len(universe)))  universe에 넣은겟수 만큼 열을 만듦
+#
+#
+## dict인 universe 사용하기
+## list(universe.keys())   리스트 형태로  universe의 keys()코드명 리스트를 반환
+## list(universe.values())  리스트 형태로 universe의 values() 종목명 리스트를 반환
