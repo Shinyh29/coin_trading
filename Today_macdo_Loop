@@ -8,6 +8,13 @@
 ## Ex) list(universe.keys())[0]
 ##      Out[107]: '069500'
 
+
+import FinanceDataReader as fdr
+import pandas as pd
+import numpy as np
+%matplotlib inline
+
+
 table_today_macdos = []
 today_macdos = []
 ## 두리스트 초기화
