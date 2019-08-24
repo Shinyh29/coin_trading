@@ -1,0 +1,23 @@
+import pandas as pd
+import numpy as np
+# 투자 UNIVERSE 구축. dict 형태로 key(종목코드 or ticker) : value(종목이름)
+
+universe = {}
+universe = { '069500': 'KODEX 200'}
+
+universe['114800']= 'KODEX 인버스'
+# dict 에 
+
+def add_universe(code, name):
+  code = str(code)
+  name = str(name)
+  universe[code] = name
+  print(pd.Series(universe))
+## 코드나 티커 , 그냥 넣고 텍스트화해서 추가시키기
+
+
+
+pd.Series(universe)  ## 세로형
+pd.DataFrame(universe, index = range(0,1)) ## 가로형
+## 만든 universe 사전의 데이터프레임화 
+## pd.DataFrame(universe, index = range(0,len(universe)))  universe에 넣은겟수 만큼 열을 만듦
