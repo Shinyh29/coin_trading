@@ -65,6 +65,7 @@ for unit in list(universe.keys()):
     ticker = unit
     name = universe[ticker]
     today_macdo_get(ticker,'2017')
+    print("---------------------------------------")
 
 
 table_today_macdos = pd.DataFrame(today_macdos)
