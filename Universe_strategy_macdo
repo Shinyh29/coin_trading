@@ -13,7 +13,65 @@ def add_universe(code, name):
   name = str(name)
   universe[code] = name
   print(pd.Series(universe))
-## 코드나 티커 , 그냥 넣고 텍스트화해서 추가시키기
+  print('len(universe) : ', len(universe))
+## 텍스트화해서 추가시키기, 바로보여주기 
+
+
+
+
+add_universe('069500', 'KODEX 200')
+add_universe('114800','KODEX 인버스')
+add_universe('229200','KODEX 코스닥150')
+add_universe('251340','KODEX 코스닥150선물인버스')
+add_universe('192090','TIGER 차이나CSI300')
+add_universe('169950','KODEX 중국본토A50')
+add_universe('133690','TIGER 미국나스닥100')
+add_universe('182480','TIGER 미국MSCI리츠')
+add_universe('245710','KINDEX 베트남VN30')
+add_universe('256440','KINDEX 인도네시아MSCI')
+add_universe('200250','KOSEF 인도Nifty50')
+add_universe('195930','TIGER 유로스탁스50')
+add_universe('245350','TIGER 유로스탁스배당30')
+add_universe('241180','TIGER 일본니케이225')
+add_universe('292560','TIGER 일본엔선물')
+add_universe('261240','KODEX 미국달러선물')
+add_universe('130680','TIGER 원유선물Enhanced(H)')
+add_universe('217770','TIGER 원유선물인버스(H)')
+add_universe('132030','KODEX 골드선물(H)')
+add_universe('137610','TIGER 농산물선물Enhanced(H)')
+add_universe('152380','KODEX 국채선물10년')
+add_universe('304660','KODEX 미국울트라30년선물(H)')
+add_universe('305080','TIGER 미국채10년선물')
+
+
+'''
+## 한국섹터는 일단 제외
+069500                 KODEX 200
+114800                 KODEX 인버스
+229200              KODEX 코스닥150
+251340         KODEX 코스닥150선물인버스
+192090           TIGER 차이나CSI300
+169950             KODEX 중국본토A50
+133690            TIGER 미국나스닥100
+182480            TIGER 미국MSCI리츠
+245710            KINDEX 베트남VN30
+256440          KINDEX 인도네시아MSCI
+200250           KOSEF 인도Nifty50
+195930             TIGER 유로스탁스50
+245350           TIGER 유로스탁스배당30
+241180            TIGER 일본니케이225
+292560               TIGER 일본엔선물
+261240              KODEX 미국달러선물
+130680     TIGER 원유선물Enhanced(H)
+217770          TIGER 원유선물인버스(H)
+132030             KODEX 골드선물(H)
+137610    TIGER 농산물선물Enhanced(H)
+152380             KODEX 국채선물10년
+304660       KODEX 미국울트라30년선물(H)
+305080            TIGER 미국채10년선물
+dtype: object
+len(universe) :  23
+'''
 
 
 
