@@ -8,7 +8,13 @@
 ## Ex) list(universe.keys())[0]
 ##      Out[107]: '069500'
 
-ticker = list(universe.keys())[0]
+table_today_macdos = []
+today_macdos = []
+## 두리스트 초기화
+
+## ticker = list(universe.keys())[0]
+
+
 def today_macdo_get(ticker, startdate):
 
     print(ticker)
@@ -43,15 +49,30 @@ def today_macdo_get(ticker, startdate):
     ## 지금보여주는 마지막 row(오늘자) 보다 하루전날(전일자)것 == 뒤에서두번째열 df['macdo'][-2]
     print("어제의_macdo : ",  df['macdo'][-2])
     print("오늘의_포지션 : ",  np.where(df['macdo'][-2]>0, 'Long포지션', 'Put or Cash포지션'))
+    today_판단 = np.where(df['macdo'][-2]>0, 1, 0)
     #print(df.tail())
     (df['Change']+1).cumprod().plot()
     # Out[19]: <matplotlib.axes._subplots.AxesSubplot at 0x9f26550>'''
+    today_macdos.append(today_판단)
     
 ## 실행 >>>today_macdo_get(ticker,'2017')
-
+## ---------------------------------------------------------------------------------------------------
+table_today_macdos = []
+today_macdos = []
+## 두리스트 초기화
 
 for unit in list(universe.keys()):
     ticker = unit
     name = universe[ticker]
     today_macdo_get(ticker,'2017')
-## 전체실행 
+
+
+table_today_macdos = pd.DataFrame(today_macdos)
+add_series = pd.Series(list(universe.values()), index = range(0,len(universe)))
+table_today_macdos['names'] = add_series
+table_today_macdos.keys()[0] = 'Position'
+table_today_macdos.rename(columns={table_today_macdos.columns[0]:'Positions'}, inplace=True)
+## df 의 첫밴쨰 컬럼명을 변경
+print(tabel_today_macods)
+
+## 전체실행 ---------------------------------------------------------------------------------------------
