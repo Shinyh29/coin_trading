@@ -73,6 +73,6 @@ add_series = pd.Series(list(universe.values()), index = range(0,len(universe)))
 table_today_macdos['names'] = add_series
 table_today_macdos.rename(columns={table_today_macdos.columns[0]:'Positions'}, inplace=True)
 ## df 의 첫밴쨰 컬럼명을 변경
-print(tabel_today_macods)
+print(table_today_macods)
 
 ## 전체실행 ---------------------------------------------------------------------------------------------
