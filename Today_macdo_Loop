@@ -51,7 +51,7 @@ def today_macdo_get(ticker, startdate):
     print("오늘의_포지션 : ",  np.where(df['macdo'][-2]>0, 'Long포지션', 'Put or Cash포지션'))
     today_판단 = np.where(df['macdo'][-2]>0, 1, 0)
     #print(df.tail())
-    (df['Change']+1).cumprod().plot()
+    ## (df['Change']+1).cumprod().plot()
     # Out[19]: <matplotlib.axes._subplots.AxesSubplot at 0x9f26550>'''
     today_macdos.append(today_판단)
     
