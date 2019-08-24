@@ -1,0 +1,3 @@
+## 1. universe 를 먼저 만듦
+## 2. macdo_Backtest (어제의 종가까지로 오늘의 포지션판단) 한종목씩 결과값을 pd.DataFrame == today_macdos 에 담기
+## 클래스로 만들면 좋겠네, 추후 HW
