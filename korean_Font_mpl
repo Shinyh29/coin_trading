@@ -1,0 +1,28 @@
+# matplotlib 그래프의 라벨  에서 한글폰트 사용하기위한 설정
+# 필요한 패키지와 라이브러리를 가져옴
+import matplotlib as mpl
+import matplotlib.pyplot as plt
+import matplotlib.font_manager as fm
+
+%matplotlib inline
+
+# 그래프에서 마이너스 폰트 깨지는 문제에 대한 대처
+mpl.rcParams['font.family'] = 'Malgun Gothic' 
+mpl.rcParams['axes.unicode_minus']= False
+
+# 맑은고딕 체로 ㄱㄱ 
+#
+#
+# 아래는 내컴터에있는 폰트 리스트 반환
+
+
+
+
+
+
+font_list = fm.findSystemFonts(fontpaths=None, fontext='ttf')
+# ttf 폰트 전체개수
+print(len(font_list))
+pd.DataFrame(font_list)
+
+
