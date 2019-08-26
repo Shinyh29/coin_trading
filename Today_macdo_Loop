@@ -7,13 +7,12 @@
 
 ## Ex) list(universe.keys())[0]
 ##      Out[107]: '069500'
-
-
+plt.rcParams["figure.figsize"] = (10,5)
 import FinanceDataReader as fdr
 import pandas as pd
 import numpy as np
-%matplotlib inline
-
+#%matplotlib inline
+import matplotlib.pyplot as plt
 
 table_today_macdos = []
 today_macdos = []
@@ -21,12 +20,12 @@ today_macdos = []
 
 ## ticker = list(universe.keys())[0]
 
-
+n = 0
 def today_macdo_get(ticker, startdate):
-
+    
     print(ticker)
     print(name)
-    
+
     df = fdr.DataReader(ticker, startdate)
     # 최근부터  보기싫은 일자 Date 숫자로 전달 n 
     #n = 150
@@ -52,27 +51,46 @@ def today_macdo_get(ticker, startdate):
     # 전일자 의 macdo 가 0보다 크다면,  오늘자의 Change 상승률 Long포지션
     # "" 0보다 작다면, 오늘자의 Change 상승률 포지션은 현금보유(전량매도) ==1
     df['osc_on'] = np.where(df['macdo'].shift(-1) > df['Zeros'], df['Change']+1, 1)
-    df['osc_on'].cumprod().plot()
+    print(n)
+    plt.figure(n)
+    plt.plot(df.index, df['osc_on'].cumprod(), label = name)
+    
     ## 지금보여주는 마지막 row(오늘자) 보다 하루전날(전일자)것 == 뒤에서두번째열 df['macdo'][-2]
     print("어제의_macdo : ",  df['macdo'][-2])
     print("오늘의_포지션 : ",  np.where(df['macdo'][-2]>0, 'Long포지션', 'Put or Cash포지션'))
+    plt.legend(loc='lower lef')
     today_판단 = np.where(df['macdo'][-2]>0, 1, 0)
     #print(df.tail())
-    ## (df['Change']+1).cumprod().plot()
+    plt.plot((df['Change']+1).cumprod())
+    plt.figure(100)
+    plt.plot(df.index, df['osc_on'].cumprod(), label = name)
+    plt.legend(loc='lower lef')
     # Out[19]: <matplotlib.axes._subplots.AxesSubplot at 0x9f26550>'''
     today_macdos.append(today_판단)
+    
     
 ## 실행 >>>today_macdo_get(ticker,'2017')
 ## ---------------------------------------------------------------------------------------------------
 table_today_macdos = []
 today_macdos = []
 ## 두리스트 초기화
-
+n = 0
 for unit in list(universe.keys()):
     ticker = unit
+    n = n+1
     name = universe[ticker]
     today_macdo_get(ticker,'2017')
     print("---------------------------------------")
+
+
+table_today_macdos = pd.DataFrame(today_macdos)
+add_series = pd.Series(list(universe.values()), index = range(0,len(universe)))
+table_today_macdos['names'] = add_series
+table_today_macdos.rename(columns={table_today_macdos.columns[0]:'Positions'}, inplace=True)
+## df 의 첫밴쨰 컬럼명을 변경
+print(table_today_macdos)
+plt.show()
+## 전체실행 ---------------------------------------------------------------------------------------------
 
 
 table_today_macdos = pd.DataFrame(today_macdos)
