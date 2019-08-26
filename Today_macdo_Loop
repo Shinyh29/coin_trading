@@ -65,7 +65,7 @@ def today_macdo_get(ticker, startdate):
     print("내일의_포지션 : ",  np.where(df['macdo'][-1]>0, 'Long포지션', 'Cash'))       
 
 
-    #plt.legend(loc='lower lef')
+    plt.legend(loc='lower left')
     today_판단 = np.where(df['macdo'][-2]>0, 1, 0)
     tomorrow_판단 = np.where(df['macdo'][-1]>0, 1, 0)
     print(df[-2::])
