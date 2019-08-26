@@ -7,7 +7,7 @@
 
 ## Ex) list(universe.keys())[0]
 ##      Out[107]: '069500'
-plt.rcParams["figure.figsize"] = (7,4)
+plt.rcParams["figure.figsize"] = (10,2)
 import FinanceDataReader as fdr
 import pandas as pd
 import numpy as np
