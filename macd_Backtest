@@ -51,3 +51,12 @@ plt.scatter(rolling_test.index, rolling_test.values, s = 15, c= 'r')
 plt.plot(rolling_test, c='orange')
 
 
+# mdd maximum_drawdown 계산 _ macdo전략
+df['hpr'] = df['osc_on'].cumprod()
+df['dd'] = (df['hpr'].cummax() - df['hpr']) / df['hpr'].cummax()
+print("MDD(%): ", df['dd'].max()*100)
+
+# mdd maximum_drawdown 계산 _ 100%hold
+df['hpr2'] = df['rChange'].cumprod()
+df['dd2'] = (df['hpr2'].cummax() - df['hpr2']) / df['hpr2'].cummax()
+print("MDD2_100%hold(%): ", df['dd2'].max()*100)
