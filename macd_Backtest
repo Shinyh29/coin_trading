@@ -1,13 +1,14 @@
-import pandas as pd
+ import pandas as pd
 import numpy as np
 import FinanceDataReader as fdr
 %matplotlib inline
 
-ticker = 'BTC/KRW'
-df = fdr.DataReader(ticker, '2018')
+ticker = '227540'
+# TIGER 헬스케어200
+df = fdr.DataReader(ticker, '2000')
 # 최근부터  보기싫은 일자 Date 숫자로 전달 n 
-n = 150
-df = df[:-n]
+#n = 1
+#df = df[:-n]
 
 def get_macd(df , short = 12 , long = 26, t=9):
     df = pd.DataFrame(df)
@@ -31,75 +32,22 @@ df['Zeros'] = 0
 # 전일자 의 macdo 가 0보다 크다면,  오늘자의 Change 상승률 Long포지션
 # "" 0보다 작다면, 오늘자의 Change 상승률 포지션은 현금보유(전량매도) ==1
 df['osc_on'] = np.where(df['macdo'].shift(-1) > df['Zeros'], df['Change']+1, 1)
-df['osc_on'].cumprod().plot()
+df['rChange'] = df['Change'] + 1
+df['test'] = np.where(df['osc_on'] >= df['rChange'], 1, 0)
+#df['osc_on'].cumprod().plot()
 ## 지금보여주는 마지막 row(오늘자) 보다 하루전날(전일자)것 == 뒤에서두번째열 df['macdo'][-2]
 print("어제의_macdo : ",  df['macdo'][-2])
 print("어제의_macdo -> 오늘의_포지션 : ",  np.where(df['macdo'][-2]>0, 'Long포지션', 'Put or Cash포지션'))
-print(df.tail())
-(df['Change']+1).cumprod().plot()
+print(df[0:100])
+#(df['Change']+1).cumprod().plot()
 # Out[19]: <matplotlib.axes._subplots.AxesSubplot at 0x9f26550>'''
 
 
-
-
-#
-#
-#
-#
-
-
-from plotly import tools
-import plotly.offline as offline
-import plotly.graph_objs as go
-
-macd = go.Scatter(
-x = df.index, 
-y = df['macd'],
-name = "MACD")
-
-signal = go.Scatter(
-x = df.index, 
-y = df['macds'],
-name = "Signal")
-
-
-oscillator = go.Bar(
-x = df.index, 
-y = df['macdo'],
-name = "Oscillator")
-
-
-
-
-trade_volume = go.Bar(
-x = df.index, 
-y = df['Volume'],
-name = "volume")
-
-
-Prices = go.Scatter(
-x = df.index, 
-y = df['Close'],
-name = "Close")
-
-
-item_name = "Netflix"
-layout = go.Layout(title='{} MACD 그래프'.format(item_name))
-fig = tools.make_subplots(rows=3, cols=1, shared_xaxes = True)
-data = [macd, signal, oscillator]
-offline.init_notebook_mode(connected=True)
-
-
-for trace in data:
-    fig.append_trace(trace, 2, 1) 
-fig.append_trace(trade_volume, 3, 1)    
-fig.append_trace(Prices, 1, 1)
-offline.plot(fig)
-
-
-
-
-
+rolling_test = df['test'].rolling(window=25).sum()/25 * 100
+df['rolling25_test'] = rolling_test
+print(df)
+plt.scatter(rolling_test.index, rolling_test.values, s = 15, c= 'r')
+plt.plot(rolling_test)
 
 
 
