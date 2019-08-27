@@ -49,7 +49,11 @@ def today_macdo_get(ticker, startdate):
     df_macdplus = get_macd(df)
     df = df_macdplus
     df['Zeros'] = 0
-
+    df['rChange'] = df['Change'] + 1
+    df['test'] = np.where(df['osc_on'] >= df['rChange'], 1, 0)
+    rolling_test = df['test'].rolling(window=25).sum()/25 * 100
+    df['rolling25_test'] = rolling_test
+    
     # 전일자 의 macdo 가 0보다 크다면,  오늘자의 Change 상승률 Long포지션
     # "" 0보다 작다면, 오늘자의 Change 상승률 포지션은 현금보유(전량매도) ==1
     df['osc_on'] = np.where(df['macdo'].shift(-1) > df['Zeros'], df['Change']+1, 1)
@@ -65,7 +69,7 @@ def today_macdo_get(ticker, startdate):
     print("내일의_포지션 : ",  np.where(df['macdo'][-1]>0, 'Long포지션', 'Cash'))       
 
 
-    plt.legend(loc='lower left')
+    plt.legend(loc='higher left')
     today_판단 = np.where(df['macdo'][-2]>0, 1, 0)
     tomorrow_판단 = np.where(df['macdo'][-1]>0, 1, 0)
     print(df[-2::])
@@ -76,6 +80,21 @@ def today_macdo_get(ticker, startdate):
     # Out[19]: <matplotlib.axes._subplots.AxesSubplot at 0x9f26550>'''
     today_macdos.append(today_판단)
     tomorrow_macdos.append(tomorrow_판단)
+    
+    plt.figure(n+1)
+    plt.scatter(rolling_test.index, rolling_test.values, s = 15, c= 'r')
+    plt.plot(rolling_test, c='orange')
+
+
+    # mdd maximum_drawdown 계산 _ macdo전략
+    df['hpr'] = df['osc_on'].cumprod()
+    df['dd'] = (df['hpr'].cummax() - df['hpr']) / df['hpr'].cummax()
+    print("MDD(%): ", df['dd'].max()*100)
+
+    # mdd maximum_drawdown 계산 _ 100%hold
+    df['hpr2'] = df['rChange'].cumprod()
+    df['dd2'] = (df['hpr2'].cummax() - df['hpr2']) / df['hpr2'].cummax()
+    print("MDD2_100%hold(%): ", df['dd2'].max()*100)
     
     
 ## 실행 >>>today_macdo_get(ticker,'2017')
