@@ -50,13 +50,14 @@ def today_macdo_get(ticker, startdate):
     df = df_macdplus
     df['Zeros'] = 0
     df['rChange'] = df['Change'] + 1
+    df['osc_on'] = np.where(df['macdo'].shift(-1) > df['Zeros'], df['Change']+1, 1)
     df['test'] = np.where(df['osc_on'] >= df['rChange'], 1, 0)
     rolling_test = df['test'].rolling(window=25).sum()/25 * 100
     df['rolling25_test'] = rolling_test
     
     # 전일자 의 macdo 가 0보다 크다면,  오늘자의 Change 상승률 Long포지션
     # "" 0보다 작다면, 오늘자의 Change 상승률 포지션은 현금보유(전량매도) ==1
-    df['osc_on'] = np.where(df['macdo'].shift(-1) > df['Zeros'], df['Change']+1, 1)
+
     print(n)
     plt.figure(n)
     plt.plot(df.index, df['osc_on'].cumprod(), label = name)
