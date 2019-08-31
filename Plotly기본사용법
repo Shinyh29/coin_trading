@@ -1,0 +1,106 @@
+## --- df 를 파이낸스데이타 리더로 가져온 영한
+
+import FinanceDataReader as fdr
+df = fdr.DataReader('NFLX','2019')
+
+
+
+def get_macd(df, short=12, long=26, t=9):
+    # 입력받은 Input값이 pd.DataFrame임을 정의
+    df = pd.DataFrame(df)
+    # MACD 관련수식 _ 만들기
+    # 단기 12일(단기), 26일(장기) _EMA "지수이동평균"
+    ma_12 = df.close.ewm(span=12).mean()
+    ma_26 = df.close.ewm(span=26).mean()
+    macd = ma_12 - ma_26
+    #
+    # macd이론의 시그널==macds ?
+    macds = macd.ewm(span=9).mean()
+    # macd 이론의 오실레이터
+    macdo = macd - macds
+    ## Oscillator
+    #
+    df = df.assign(macd=macd, macds=macds, macdo=macdo).dropna()
+    #
+    #
+    return df
+
+def get_macd(df, short=12, long=26, t=9):
+    # 입력받은 Input값이 pd.DataFrame임을 정의
+    df = pd.DataFrame(df)
+    # MACD 관련수식 _ 만들기
+    # 단기 12일(단기), 26일(장기) _EMA "지수이동평균"
+    ma_12 = df.Close.ewm(span=12).mean()
+    ma_26 = df.Close.ewm(span=26).mean()
+    macd = ma_12 - ma_26
+    #
+    # macd이론의 시그널==macds ?
+    macds = macd.ewm(span=9).mean()
+    # macd 이론의 오실레이터
+    macdo = macd - macds
+    ## Oscillator
+    #
+    df = df.assign(macd=macd, macds=macds, macdo=macdo).dropna()
+    #
+    #
+    return df
+
+
+df_macdplus = get_macd(df)
+
+
+## -------------------------------------------------------------------------------
+## --------------------Plotly 라이브러리 로 [동적]그래프그리기--------------------
+## -------------------------------------------------------------------------------
+
+
+df = df_macdplus
+from plotly import tools
+import plotly.offline as offline
+import plotly.graph_objs as go
+
+macd = go.Scatter(
+x = df.index, 
+y = df['macd'],
+name = "MACD")
+
+signal = go.Scatter(
+x = df.index, 
+y = df['macds'],
+name = "Signal")
+
+
+oscillator = go.Bar(
+x = df.index, 
+y = df['macdo'],
+name = "Oscillator")
+
+
+
+
+trade_volume = go.Bar(
+x = df.index, 
+y = df['Volume'],
+name = "volume")
+
+
+Prices = go.Scatter(
+x = df.index, 
+y = df['Close'],
+name = "Close")
+
+
+item_name = "Netflix"
+layout = go.Layout(title='{} MACD 그래프'.format(item_name))
+fig = tools.make_subplots(rows=3, cols=1, shared_xaxes = True)
+data = [macd, signal, oscillator]
+offline.init_notebook_mode(connected=True)
+
+
+for trace in data:
+    fig.append_trace(trace, 2, 1) 
+fig.append_trace(trade_volume, 3, 1)    
+fig.append_trace(Prices, 1, 1)
+offline.plot(fig)
+
+
