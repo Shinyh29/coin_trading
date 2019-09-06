@@ -1,0 +1,47 @@
+import pandas as pd
+import numpy as np
+# 투자 UNIVERSE 구축. dict 형태로 key(종목코드 or ticker) : value(종목이름)
+
+universe_coin = {}
+#universe = { '069500': 'KODEX 200'}
+
+#universe['114800']= 'KODEX 인버스'
+# dict 에 
+
+def add_universe(code, name):
+  code = str(code)
+  name = str(name)
+  universe_coin[code] = name
+  print(pd.Series(universe_coin))
+  print('len(universe) : ', len(universe_coin))
+## 텍스트화해서 추가시키기, 바로보여주기 
+
+
+
+
+#add_universe('USD/KRW', 'USD/KRW')
+#add_universe('USD/EUR','USD/EUR')
+#add_universe('USD/JPY','USD/JPY')
+#add_universe('USD/CNY','USD/CNY')
+add_universe('BTC/KRW','BTC/KRW')
+add_universe('ETH/KRW','ETH/KRW')
+add_universe('XRP/KRW','XRP/KRW')
+add_universe('BCH/KRW','BCH/KRW')
+add_universe('EOS/KRW','EOS/KRW')
+add_universe('BTC','BTC')
+
+'''
+## 한국섹터는 일단 제외
+'''
+
+
+
+##pd.Series(universe_coin)  ## 세로형
+pd.DataFrame(universe_coin, index = range(0,1)) ## 가로형
+## 만든 universe 사전의 데이터프레임화 
+## pd.DataFrame(universe, index = range(0,len(universe)))  universe에 넣은겟수 만큼 열을 만듦
+#
+#
+## dict인 universe 사용하기
+## list(universe.keys())   리스트 형태로  universe의 keys()코드명 리스트를 반환
+## list(universe.values())  리스트 형태로 universe의 values() 종목명 리스트를 반환
