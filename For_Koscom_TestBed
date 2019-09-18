@@ -16,6 +16,8 @@ table_Port평가금액 =(  (table_상승률.Date) * (table_비중.Date) ##행렬
 '''
 
 
+df_score = pd.DataFrame(np.where(df.macdo > df.Zeros, 1, 0), index = df.index)
+
 table_신호 = pd.DataFrame()
 for unit in range(0, len(universe)):
     unit = int(unit)
