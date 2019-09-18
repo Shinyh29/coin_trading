@@ -2,47 +2,6 @@
 # (1) 모델에 대한 경제적인 관점 먼저 -> (2) 알고리즘 
 # 1. 종목별비중 // 2. 일별수익률 // 3. 자산군별 Daily비중
 
-'''
-table_신호 = pd.DataFrame()
-table_비중 = pd.DataFrame()
-# 논리 :: 
-비중_모멘텀 = (price.Close / price.Close [-5])
-비중_모멘텀 = 비중_모멘텀 / sum(종목별_(Daily)비중_모멘텀) ##'%==float  '
-table_비중['종목'] = np.where(table_신호.인자 = 1 , 비중_모멘텀 , 0)
-table_상승률 = pd.DataFrame()
-## 종목군별 평가금액 상승률  = (table)비중 * 상승률 = 종목별_상승률 
-## table_Port = 전체평가금액 * 종목군별 평가금액 상승률
-table_Port평가금액 =(  (table_상승률.Date) * (table_비중.Date) ##행렬곱(벡터내적) ).cumprod() #누적수익률 * 원금_평가금액
-'''
-
-
-df_score = pd.DataFrame(np.where(df.macdo > df.Zeros, 1, 0), index = df.index)
-
-table_신호 = pd.DataFrame()
-for unit in range(0, len(universe)):
-    unit = int(unit)
-    ticker = list(universe.keys())[unit]
-    
-    ### df. ~~ macdo 포지션 구축 함수
-    # ticker 에따라 df.test가 바뀌어야함
-    table_신호[ticker] = df.test
-print(table_신호)
-#
-#
-#
-#
-#
-
-
-## 1. universe 를 먼저 만듦
-## 2. macdo_Backtest (어제의 종가까지로 오늘의 포지션판단) 한종목씩 결과값을 pd.DataFrame == today_macdos 에 담기
-## 클래스로 만들면 좋겠네, 추후 HW
-
-# 단일종목 2. 의 함수화. today_macdos_change, today_macdos에 오늘자 판단, 상승률 넣기
-# for loop 로  universe.keys() 의 코드들을 전달. 
-
-## Ex) list(universe.keys())[0]
-##      Out[107]: '069500'
 plt.rcParams["figure.figsize"] = (10,2)
 import FinanceDataReader as fdr
 import pandas as pd
@@ -118,16 +77,16 @@ for unit in list(universe.keys()):
     ticker = unit
     n = n+1
     name = universe[ticker]
-    today_macdo_get(ticker,'2019-09-01')
+    today_macdo_get(ticker,'2019-05')
     print("---------------------------------------")
 
 
 table_today_macdos = pd.DataFrame()
 
-table_비중 = table_모멘텀/table_모멘텀.sum() * 100
+table_비중 = table_신호 * table_모멘텀
 
-print(table_신호)
-print(table_모멘텀)
-print(table_비중)
+print(table_신호.tail())
+print(table_모멘텀.tail())
+print(table_비중) 
 #plt.show()
 ## 전체실행 --------------------------------------------------------------------------------------
