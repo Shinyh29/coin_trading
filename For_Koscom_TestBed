@@ -1,0 +1,20 @@
+# Koscom_로보어드바이저 Testbed 알고리즘모델
+# (1) 모델에 대한 경제적인 관점 먼저 -> (2) 알고리즘 
+# 1. 종목별비중 // 2. 일별수익률 // 3. 자산군별 Daily비중
+
+
+table_신호 = pd.DataFrame()
+table_비중 = pd.DataFrame()
+# 논리 :: 
+'''
+비중_모멘텀 = (price.Close / price.Close [-5])
+비중_모멘텀 = 비중_모멘텀 / sum(종목별_(Daily)비중_모멘텀) ##'%==float  '
+table_비중['종목'] = np.where(table_신호.인자 = 1 , 비중_모멘텀 , 0)
+'''  
+
+table_상승률 = pd.DataFrame()
+## 종목군별 평가금액 상승률  = (table)비중 * 상승률 = 종목별_상승률 
+## table_Port = 전체평가금액 * 종목군별 평가금액 상승률
+'''
+table_Port평가금액 =(  (table_상승률.Date) * (table_비중.Date) ##행렬곱(벡터내적) ).cumprod() #누적수익률 * 원금_평가금액
+'''
