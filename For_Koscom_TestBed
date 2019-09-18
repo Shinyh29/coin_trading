@@ -85,8 +85,12 @@ table_today_macdos = pd.DataFrame()
 
 table_비중 = table_신호 * table_모멘텀
 
+
+    
 print(table_신호.tail())
 print(table_모멘텀.tail())
-print(table_비중) 
-#plt.show()
+print(table_비중.tail()) 
+#print(table_신호.values[-2])
+#print(table_모멘텀.values[-2])
+#print(table_비중.values[-2])
 ## 전체실행 --------------------------------------------------------------------------------------
