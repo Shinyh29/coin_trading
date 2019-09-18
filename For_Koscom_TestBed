@@ -84,7 +84,7 @@ for unit in list(universe.keys()):
 table_today_macdos = pd.DataFrame()
 
 table_비중 = table_신호 * table_모멘텀
-table_비중['Sum'] = table_비중.sum(axis=1)
+SSum = table_비중.sum(axis=1)
 
     
 print(table_신호.tail())
