@@ -27,39 +27,97 @@ for unit in range(0, len(universe)):
     # ticker 에따라 df.test가 바뀌어야함
     table_신호[ticker] = df.test
 print(table_신호)
+#
+#
+#
+#
+#
+
+
+## 1. universe 를 먼저 만듦
+## 2. macdo_Backtest (어제의 종가까지로 오늘의 포지션판단) 한종목씩 결과값을 pd.DataFrame == today_macdos 에 담기
+## 클래스로 만들면 좋겠네, 추후 HW
+
+# 단일종목 2. 의 함수화. today_macdos_change, today_macdos에 오늘자 판단, 상승률 넣기
+# for loop 로  universe.keys() 의 코드들을 전달. 
+
+## Ex) list(universe.keys())[0]
+##      Out[107]: '069500'
+plt.rcParams["figure.figsize"] = (10,2)
+import FinanceDataReader as fdr
+import pandas as pd
+import numpy as np
+#%matplotlib inline
+import matplotlib.pyplot as plt
+
+table_신호 = pd.DataFrame()
+table_today_macdos = []
+today_macdos = []
+tomorrow_macdos = []
+## 두리스트 초기화
+
+## ticker = list(universe.keys())[0]
+
+n = 0
+def today_macdo_get(ticker, startdate):
+
+    print(ticker)
+    print(name)
+
+    df = fdr.DataReader(ticker, startdate)
+    # 최근부터  보기싫은 일자 Date 숫자로 전달 n 
+    #n = 150
+    #df = df[:-n]
+
+    def get_macd(df , short = 12 , long = 26, t=9):
+        df = pd.DataFrame(df)
+        ma_12 = df.Close.ewm(span=12).mean()
+        ma_26 = df.Close.ewm(span=26).mean()
+        macd = ma_12 - ma_26
+        macds = macd.ewm(span=9).mean()
+        macdo = macd - macds
+        df = df.assign(macd= macd, macds= macds, macdo = macdo).dropna()
+        return df
 
 
 
-'''
-## 지금보여주는 마지막 row(오늘자) 보다 하루전날(전일자)것 == 뒤에서두번째열 df['macdo'][-2]
-print("어제의_macdo : ",  df['macdo'][-2])
-print("오늘의_포지션 : ",  np.where(df['macdo'][-2]>0, 'Long포지션', 'Cash'))
-print("-----")
-print("오늘의_macdo : ",  df['macdo'][-1])
-print("내일의_포지션 : ",  np.where(df['macdo'][-1]>0, 'Long포지션', 'Cash'))     
-'''
+    df_macdplus = get_macd(df)
+    df_macdplus = get_macd(df)
+    df = df_macdplus
+    df['Zeros'] = 0
+    df['rChange'] = df['Change'] + 1
+    df['osc_on'] = np.where(df['macdo'].shift(-1) > df['Zeros'], df['Change']+1, 1)
+    df['test'] = np.where(df['osc_on'] >= df['rChange'], 1, 0)
+    rolling_test = df['test'].rolling(window=25).sum()/25 * 100
+    df['rolling25_test'] = rolling_test
+
+    # 전일자 의 macdo 가 0보다 크다면,  오늘자의 Change 상승률 Long포지션
+    # "" 0보다 작다면, 오늘자의 Change 상승률 포지션은 현금보유(전량매도) ==1
+
+    #### ------여기부터 For Koscom Testbed
+    df['Position'] = np.where(df['macdo'].shift(-1) > df['Zeros'], 1, 0)
+    table_신호[ticker] = df['Position']         
 
 
+## 실행 >>>today_macdo_get(ticker,'2017')
+## ---------------------------------------------------------------------------------------------------
+table_today_macdos = []
+today_macdos = []
+tomorrow_macdos = []
+table_신호 = pd.DataFrame()
+## 두리스트 초기화
+n = 0
+for unit in list(universe.keys()):
+    ticker = unit
+    n = n+1
+    name = universe[ticker]
+    today_macdo_get(ticker,'2017')
+    print("---------------------------------------")
 
-''' 주석
-            069500  114800  229200  251340  192090  169950  099140  133690  \
-Date                                                                         
-2015-09-24       1       1       1       1       1       1       1       1   
-2015-09-25       1       1       1       1       1       1       1       1   
-2015-09-30       1       1       1       1       1       1       1       1   
-2015-10-01       0       0       0       0       0       0       0       0   
-2015-10-02       1       1       1       1       1       1       1       1   
-2015-10-05       1       1       1       1       1       1       1       1   
-2015-10-06       1       1       1       1       1       1       1       1   
-2015-10-07       1       1       1       1       1       1       1       1   
-2015-10-08       1       1       1       1       1       1       1       1   
-2015-10-12       1       1       1       1       1       1       1       1   
-2015-10-13       1       1       1       1       1       1       1       1   
-2015-10-14       1       1       1       1       1       1       1       1   
-2015-10-15       0       0       0       0       0       0       0       0   
-2015-10-16       1       1       1       1       1       1       1       1   
-2015-10-19       1       1       1       1       1       1       1       1   
-2015-10-20       1       1       1       1       1       1       1       1   
-2015-10-21       1       1       1       1       1       1       1       1   
-2015-10-22       1       1       1       1       1       1       1       1   
-'''
+
+table_today_macdos = pd.DataFrame()
+
+
+print(table_신호)
+#plt.show()
+## 전체실행 --------------------------------------------------------------------------------------
