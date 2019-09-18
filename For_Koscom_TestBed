@@ -28,6 +28,16 @@ print(table_신호)
 
 
 
+'''
+## 지금보여주는 마지막 row(오늘자) 보다 하루전날(전일자)것 == 뒤에서두번째열 df['macdo'][-2]
+print("어제의_macdo : ",  df['macdo'][-2])
+print("오늘의_포지션 : ",  np.where(df['macdo'][-2]>0, 'Long포지션', 'Cash'))
+print("-----")
+print("오늘의_macdo : ",  df['macdo'][-1])
+print("내일의_포지션 : ",  np.where(df['macdo'][-1]>0, 'Long포지션', 'Cash'))     
+'''
+
+
 
 ''' 주석
             069500  114800  229200  251340  192090  169950  099140  133690  \
