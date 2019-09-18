@@ -51,6 +51,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 table_신호 = pd.DataFrame()
+table_모멘텀 = pd.DataFrame() 
+
+
 table_today_macdos = []
 today_macdos = []
 tomorrow_macdos = []
@@ -97,6 +100,9 @@ def today_macdo_get(ticker, startdate):
     #### ------여기부터 For Koscom Testbed
     df['Position'] = np.where(df['macdo'].shift(-1) > df['Zeros'], 1, 0)
     table_신호[ticker] = df['Position']         
+    table_모멘텀[ticker] = df['Close'] / df['Close'].shift(5)
+
+
 
 
 ## 실행 >>>today_macdo_get(ticker,'2017')
@@ -105,19 +111,23 @@ table_today_macdos = []
 today_macdos = []
 tomorrow_macdos = []
 table_신호 = pd.DataFrame()
+table_모멘텀 = pd.DataFrame()
 ## 두리스트 초기화
 n = 0
 for unit in list(universe.keys()):
     ticker = unit
     n = n+1
     name = universe[ticker]
-    today_macdo_get(ticker,'2017')
+    today_macdo_get(ticker,'2019-09-01')
     print("---------------------------------------")
 
 
 table_today_macdos = pd.DataFrame()
 
+table_비중 = table_모멘텀/table_모멘텀.sum() * 100
 
 print(table_신호)
+print(table_모멘텀)
+print(table_비중)
 #plt.show()
 ## 전체실행 --------------------------------------------------------------------------------------
