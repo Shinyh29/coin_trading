@@ -11,6 +11,7 @@ import matplotlib.pyplot as plt
 
 table_신호 = pd.DataFrame()
 table_모멘텀 = pd.DataFrame() 
+table_rChange = pd.DataFrame()
 
 
 table_today_macdos = []
@@ -60,7 +61,7 @@ def today_macdo_get(ticker, startdate):
     df['Position'] = np.where(df['macdo'] > df['Zeros'], 1, 0)
     table_신호[ticker] = df['Position']         
     table_모멘텀[ticker] = df['Close'] / df['Close'].shift(5)
-
+    table_rChange[ticker] = df['rChange']
 
 
 
@@ -98,7 +99,7 @@ for row in table_비중.values:
     k = k+1
 #print(table_비중)
 print(table_비중.tail())
-
+print(table_rChange)
 
 
 ## 전체실행 --------------------------------------------------------------------------------------
