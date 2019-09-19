@@ -57,7 +57,7 @@ def today_macdo_get(ticker, startdate):
     # "" 0보다 작다면, 오늘자의 Change 상승률 포지션은 현금보유(전량매도) ==1
 
     #### ------여기부터 For Koscom Testbed
-    df['Position'] = np.where(df['macdo'].shift(-1) > df['Zeros'], 1, 0)
+    df['Position'] = np.where(df['macdo'] > df['Zeros'], 1, 0)
     table_신호[ticker] = df['Position']         
     table_모멘텀[ticker] = df['Close'] / df['Close'].shift(5)
 
