@@ -2,7 +2,7 @@
 # (1) 모델에 대한 경제적인 관점 먼저 -> (2) 알고리즘 
 # 1. 종목별비중 // 2. 일별수익률 // 3. 자산군별 Daily비중
 
-plt.rcParams["figure.figsize"] = (10,2)
+plt.rcParams["figure.figsize"] = (10,6)
 import FinanceDataReader as fdr
 import pandas as pd
 import numpy as np
@@ -13,7 +13,8 @@ table_신호 = pd.DataFrame()
 table_모멘텀 = pd.DataFrame() 
 table_rChange = pd.DataFrame()
 
-
+# M_num > 2 이상 int :: M_num일간 모멘텀(상승률) 이니깐
+M_num = 5
 
 table_today_macdos = []
 today_macdos = []
@@ -25,7 +26,7 @@ tomorrow_macdos = []
 n = 0
 def today_macdo_get(ticker, startdate):
 
-    print(ticker)
+    #print(ticker)
     print(name)
 
     df = fdr.DataReader(ticker, startdate)
@@ -61,7 +62,7 @@ def today_macdo_get(ticker, startdate):
     #### ------여기부터 For Koscom Testbed
     df['Position'] = np.where(df['macdo'] > df['Zeros'], 1, 0)
     table_신호[ticker] = df['Position']         
-    table_모멘텀[ticker] = df['Close'] / df['Close'].shift(5)
+    table_모멘텀[ticker] = df['Close'] / df['Close'].shift(M_num)
     table_rChange[ticker] = df['rChange']
     if ticker == '069500': # kodex 200
         plt.plot(df.index[5::], df['rChange'][5::].cumprod(), label = name) 
@@ -70,8 +71,26 @@ def today_macdo_get(ticker, startdate):
     elif ticker == '133690': # TIGER 미국나스닥100
         plt.plot(df.index[5::], df['rChange'][5::].cumprod(), label = name)
         plt.legend(loc='upper left')
-    
+
+    elif ticker == '229200': # KODEX 코스닥150
+        plt.plot(df.index[5::], df['rChange'][5::].cumprod(), label = name)
+        plt.legend(loc='upper left')
+
+    elif ticker == '192090': # TIGER 차이나CSI300
+        plt.plot(df.index[5::], df['rChange'][5::].cumprod(), label = name)
+        plt.legend(loc='upper left')
+
+    elif ticker == '132030': # KODEX 골드선물(H)
+        plt.plot(df.index[5::], df['rChange'][5::].cumprod(), label = name)
+        plt.legend(loc='upper left')
+
+    elif ticker == '304660': # KODEX 미국울트라30년선물(H)
+        plt.plot(df.index[5::], df['rChange'][5::].cumprod(), label = name)
+        plt.legend(loc='upper left')
         
+    elif ticker == '152380': # KODEX 국채선물10년
+        plt.plot(df.index[5::], df['rChange'][5::].cumprod(), label = name)
+        plt.legend(loc='upper left')
 
 
 ## 실행 >>>today_macdo_get(ticker,'2017')
@@ -90,7 +109,7 @@ for unit in list(universe.keys()):
     n = n+1
     name = universe[ticker]
     today_macdo_get(ticker,'2017-05')
-    print("---------------------------------------")
+    #print("---------------------------------------")
 
 
 table_today_macdos = pd.DataFrame()
@@ -99,18 +118,18 @@ table_비중 = table_신호 * table_모멘텀
 SSum = table_비중.sum(axis=1)
 
 
-print(table_신호.tail())
-print(table_모멘텀.tail())
-print(table_비중.tail()) 
+#print(table_신호.tail())
+#print(table_모멘텀.tail())
+#print(table_비중.tail()) 
 
 k = 0 
 for row in table_비중.values:
-    print(row)
+    #print(row)
     table_비중.values[k] = pd.Series(row / SSum[k] * 100)
     k = k+1
 #print(table_비중)
-print(table_비중.tail())
-print(table_rChange)
+#print(table_비중.tail())
+#print(table_rChange)
 
 
 ## 전체실행 --------------------------------------------------------------------------------------
@@ -136,5 +155,5 @@ print(table_rChange)
 ###
 ### ## 5일 모멘텀을 비중으로 결정했으니 5일이 모자라는 head의 5일 비중합은 0, cumprod()도 0 가되니까 배제 . 
 ### ## 6부터 카운트 ㄱㄱ
-plt.plot(table_rChange.index[5::], ((table_비중 * table_rChange).sum(axis=1) / 100)[5::].cumprod(), label = 'Global_DualMomentom_ofETF__Port')
+plt.plot(table_rChange.index[M_num::], ((table_비중 * table_rChange).sum(axis=1) / 100)[M_num::].cumprod(), label = 'Global_DualMomentom_ofETF__Port')
 plt.legend(loc = 'upper left')
