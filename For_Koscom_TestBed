@@ -132,7 +132,7 @@ for row in table_비중.values:
 #print(table_비중)
 #print(table_비중.tail())
 #print(table_rChange)
-
+Port_dChange = ( (table_비중 * table_rChange).sum(axis=1)/100 )[M_num::]
 
 ## 전체실행 --------------------------------------------------------------------------------------
 ##
