@@ -95,10 +95,10 @@ print(table_비중.tail())
 #print(table_비중.values[-2])
 ## 전체실행 --------------------------------------------------------------------------------------
 ##
-## date_w = pd.DataFrame(table_비중.values[6] / SSum[6] * 100)
+## date_w = pd.Series(table_비중.values[6] / SSum[6] * 100)
 ## date_w_sum = pd.DataFrame(table_비중.values[6] / SSum[6] * 100).sum(axis=0)
 ## axis = 1 : 가로로 단일 row 합,  axis =0 : 세로로 단일 column 합. 
-##
-##
+## ___________<< Date[6] 의 밸류인 
+## table_비중.values[6] = pd.Series(table_비중.values[6] / SSum[6] * 100)
 ##
 ##
