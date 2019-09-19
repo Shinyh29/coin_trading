@@ -101,7 +101,7 @@ tomorrow_macdos = []
 table_신호 = pd.DataFrame()
 table_모멘텀 = pd.DataFrame()
 table_rChange = pd.DataFrame()
-M_num = 25
+M_num = 5
 
 
 ## 두리스트 초기화
