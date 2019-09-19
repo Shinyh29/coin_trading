@@ -120,3 +120,12 @@ print(table_rChange)
 ### table_비중.sum(axis=1)
 ##### row별 비중합 100% 확인
 ###
+###
+###
+###
+###
+###
+###
+### ## 5일 모멘텀을 비중으로 결정했으니 5일이 모자라는 head의 5일 비중합은 0, cumprod()도 0 가되니까 배제 . 
+### ## 6부터 카운트 ㄱㄱ
+plt.plot(((table_비중 * table_rChange).sum(axis=1) / 100)[5::].cumprod())
