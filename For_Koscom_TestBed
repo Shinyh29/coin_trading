@@ -65,31 +65,31 @@ def today_macdo_get(ticker, startdate):
     table_모멘텀[ticker] = df['Close'] / df['Close'].shift(M_num)
     table_rChange[ticker] = df['rChange']
     if ticker == '069500': # kodex 200
-        plt.plot(df.index[5::], df['rChange'][5::].cumprod(), label = name) 
+        plt.plot(df.index[M_num::], df['rChange'][M_num::].cumprod(), label = name) 
         plt.legend(loc='upper left')
 
     elif ticker == '133690': # TIGER 미국나스닥100
-        plt.plot(df.index[5::], df['rChange'][5::].cumprod(), label = name)
+        plt.plot(df.index[M_num::], df['rChange'][M_num::].cumprod(), label = name)
         plt.legend(loc='upper left')
 
     elif ticker == '229200': # KODEX 코스닥150
-        plt.plot(df.index[5::], df['rChange'][5::].cumprod(), label = name)
+        plt.plot(df.index[M_num::], df['rChange'][M_num::].cumprod(), label = name)
         plt.legend(loc='upper left')
 
     elif ticker == '192090': # TIGER 차이나CSI300
-        plt.plot(df.index[5::], df['rChange'][5::].cumprod(), label = name)
+        plt.plot(df.index[M_num::], df['rChange'][M_num::].cumprod(), label = name)
         plt.legend(loc='upper left')
 
     elif ticker == '132030': # KODEX 골드선물(H)
-        plt.plot(df.index[5::], df['rChange'][5::].cumprod(), label = name)
+        plt.plot(df.index[M_num::], df['rChange'][M_num::].cumprod(), label = name)
         plt.legend(loc='upper left')
 
     elif ticker == '304660': # KODEX 미국울트라30년선물(H)
-        plt.plot(df.index[5::], df['rChange'][5::].cumprod(), label = name)
+        plt.plot(df.index[M_num::], df['rChange'][M_num::].cumprod(), label = name)
         plt.legend(loc='upper left')
         
     elif ticker == '152380': # KODEX 국채선물10년
-        plt.plot(df.index[5::], df['rChange'][5::].cumprod(), label = name)
+        plt.plot(df.index[M_num::], df['rChange'][M_num::].cumprod(), label = name)
         plt.legend(loc='upper left')
 
 
@@ -101,6 +101,8 @@ tomorrow_macdos = []
 table_신호 = pd.DataFrame()
 table_모멘텀 = pd.DataFrame()
 table_rChange = pd.DataFrame()
+M_num = 25
+
 
 ## 두리스트 초기화
 n = 0
@@ -155,5 +157,5 @@ for row in table_비중.values:
 ###
 ### ## 5일 모멘텀을 비중으로 결정했으니 5일이 모자라는 head의 5일 비중합은 0, cumprod()도 0 가되니까 배제 . 
 ### ## 6부터 카운트 ㄱㄱ
-plt.plot(table_rChange.index[M_num::], ((table_비중 * table_rChange).sum(axis=1) / 100)[M_num::].cumprod(), label = 'Global_DualMomentom_ofETF__Port')
+plt.plot(table_rChange.index[M_num::], ((table_비중 * table_rChange).sum(axis=1) / 100)[M_num::].cumprod(), label = 'S__Port')
 plt.legend(loc = 'upper left')
