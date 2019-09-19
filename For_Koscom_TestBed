@@ -63,7 +63,15 @@ def today_macdo_get(ticker, startdate):
     table_신호[ticker] = df['Position']         
     table_모멘텀[ticker] = df['Close'] / df['Close'].shift(5)
     table_rChange[ticker] = df['rChange']
+    if ticker == '069500': # kodex 200
+        plt.plot(df.index[5::], df['rChange'][5::].cumprod(), label = name) 
+        plt.legend(loc='upper left')
 
+    elif ticker == '133690': # TIGER 미국나스닥100
+        plt.plot(df.index[5::], df['rChange'][5::].cumprod(), label = name)
+        plt.legend(loc='upper left')
+    
+        
 
 
 ## 실행 >>>today_macdo_get(ticker,'2017')
@@ -81,7 +89,7 @@ for unit in list(universe.keys()):
     ticker = unit
     n = n+1
     name = universe[ticker]
-    today_macdo_get(ticker,'2019-05')
+    today_macdo_get(ticker,'2017-05')
     print("---------------------------------------")
 
 
@@ -90,7 +98,7 @@ table_today_macdos = pd.DataFrame()
 table_비중 = table_신호 * table_모멘텀
 SSum = table_비중.sum(axis=1)
 
-    
+
 print(table_신호.tail())
 print(table_모멘텀.tail())
 print(table_비중.tail()) 
@@ -128,4 +136,5 @@ print(table_rChange)
 ###
 ### ## 5일 모멘텀을 비중으로 결정했으니 5일이 모자라는 head의 5일 비중합은 0, cumprod()도 0 가되니까 배제 . 
 ### ## 6부터 카운트 ㄱㄱ
-plt.plot(((table_비중 * table_rChange).sum(axis=1) / 100)[5::].cumprod())
+plt.plot(table_rChange.index[5::], ((table_비중 * table_rChange).sum(axis=1) / 100)[5::].cumprod(), label = 'Global_DualMomentom_ofETF__Port')
+plt.legend(loc = 'upper left')
