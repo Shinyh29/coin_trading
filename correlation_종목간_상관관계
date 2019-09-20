@@ -9,3 +9,12 @@ plt.colorbar()
 plt.xticks(range(len(corrs)), corrs.columns)
 plt.yticks(range(len(corrs)), corrs.columns)
 plt.gcf().set_size_inches(10,10)
+
+
+
+## -------------------------------------------------------------------
+# 변동성 측정
+min_num = 75
+vol = table_rChange.rolling(window = min_num).std() * np.sqrt(min_num)
+vol.plot(figsize = (10, 5))
+
