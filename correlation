@@ -1,0 +1,11 @@
+## After ___for_Koscom_testbed 실행한 후 에
+
+
+corrs = table_rChange.corr()
+
+ # HeatMap _ Correlation 히트맵 상관관계 
+plt.imshow(corrs, cmap = 'hot', interpolation = 'none')
+plt.colorbar()
+plt.xticks(range(len(corrs)), corrs.columns)
+plt.yticks(range(len(corrs)), corrs.columns)
+plt.gcf().set_size_inches(18,18)
