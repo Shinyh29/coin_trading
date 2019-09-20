@@ -140,6 +140,17 @@ for row in table_비중.values:
 #print(table_rChange)
 #print(table_Price)
 Port_dChange = ( (table_비중 * table_rChange).sum(axis=1)/100 )[M_num::]
+table_mPrice = table_Price.asfreq('M').ffill()
+table_mChange = table_mPrice / table_mPrice.shift(1)  # 종목별 월간수익률 
+# table_mChange.cumprod() ## 종목별 월간수익률 누적
+
+Port_Price = 1000 * Port_dChange.cumprod()  ## Port_Price == 시작을 기준가 1000 으로, 했을때 Port일간 기준가
+Port_mPrice = Port_Price.asfreq('M').ffill()    ## Port_mPrice == 기준가의 매월말일 가격
+Port_mChange = Port_mPrice / Port_mPrice.shift(1)
+
+
+
+
 
 ## 전체실행 --------------------------------------------------------------------------------------
 ##
@@ -167,3 +178,6 @@ Port_dChange = ( (table_비중 * table_rChange).sum(axis=1)/100 )[M_num::]
 plt.plot(table_rChange.index[M_num::], ((table_비중 * table_rChange).sum(axis=1) / 100)[M_num::].cumprod(), label = 'S__Port',linewidth=2.5, linestyle ='--', color='red' )
 
 plt.legend(loc = 'upper left')
+(100 *(Port_mChange -1)).plot(kind ='bar', color = 'r')     ## Port의 월간수익률(%) , bar차트. 
+
+
