@@ -4,6 +4,7 @@
 corrs = table_rChange.corr()
 
  # HeatMap _ Correlation 히트맵 상관관계 
+plt.figure(1)
 plt.imshow(corrs, cmap = 'hot', interpolation = 'none')
 plt.colorbar()
 plt.xticks(range(len(corrs)), corrs.columns)
@@ -14,6 +15,7 @@ plt.gcf().set_size_inches(10,10)
 
 ## -------------------------------------------------------------------
 # 변동성 측정
+plt.figure(2)
 min_num = 75
 vol = table_rChange.rolling(window = min_num).std() * np.sqrt(min_num)
 vol.plot(figsize = (10, 5))
@@ -21,7 +23,7 @@ vol.plot(figsize = (10, 5))
 
 ## -------------------------------------------------------------------
 # 위험대비 수익률 산점도 
-
+plt.figure(3)
 plt.scatter(table_rChange.mean(), table_rChange.std())
 plt.xlabel('Excpected RETURNS')
 plt.ylabel('RISK')
