@@ -178,6 +178,9 @@ Port_mChange = Port_mPrice / Port_mPrice.shift(1)
 plt.plot(table_rChange.index[M_num::], ((table_비중 * table_rChange).sum(axis=1) / 100)[M_num::].cumprod(), label = 'S__Port',linewidth=2.5, linestyle ='--', color='red' )
 
 plt.legend(loc = 'upper left')
-#  (100 *(Port_mChange -1)).plot(kind ='bar', color = 'r')     ## Port의 월간수익률(%) , bar차트. 
-#  (100 *(Port_dChange -1)).plot(kind ='bar', color = 'orange')      ## Port의 일간수익률(%) , bar차트.
+
+plt.figure(2)
+(100 *(Port_mChange -1)).plot(kind ='bar', color = 'r')     ## Port의 월간수익률(%) , bar차트. 
+plt.figure(3)
+(100 *(Port_dChange -1)).plot(kind ='bar', color = 'orange')      ## Port의 일간수익률(%) , bar차트.
 
