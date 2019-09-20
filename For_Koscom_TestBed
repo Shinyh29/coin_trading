@@ -12,6 +12,8 @@ import matplotlib.pyplot as plt
 table_신호 = pd.DataFrame()
 table_모멘텀 = pd.DataFrame() 
 table_rChange = pd.DataFrame()
+table_Price = pd.DataFrame()
+
 
 # M_num > 2 이상 int :: M_num일간 모멘텀(상승률) 이니깐
 M_num = 5
@@ -64,6 +66,9 @@ def today_macdo_get(ticker, startdate):
     table_신호[ticker] = df['Position']         
     table_모멘텀[ticker] = df['Close'] / df['Close'].shift(M_num)
     table_rChange[ticker] = df['rChange']
+    table_Price[ticker] = df['Close']
+    
+    
     if ticker == '069500': # kodex 200
         plt.plot(df.index[M_num::], df['rChange'][M_num::].cumprod(), label = name) 
         plt.legend(loc='upper left')
@@ -101,6 +106,7 @@ tomorrow_macdos = []
 table_신호 = pd.DataFrame()
 table_모멘텀 = pd.DataFrame()
 table_rChange = pd.DataFrame()
+table_Price = pd.DataFrame()
 M_num = 5
 
 
@@ -132,6 +138,7 @@ for row in table_비중.values:
 #print(table_비중)
 #print(table_비중.tail())
 #print(table_rChange)
+#print(table_Price)
 Port_dChange = ( (table_비중 * table_rChange).sum(axis=1)/100 )[M_num::]
 
 ## 전체실행 --------------------------------------------------------------------------------------
