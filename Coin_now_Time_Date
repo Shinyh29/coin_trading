@@ -1,0 +1,15 @@
+import FinanceDataReader as fdr 
+import datetime
+import time
+
+
+i = 0
+table_btc = pd.DataFrame() 
+while i<60:
+    print(datetime.datetime.now().time())
+    dated = datetime.datetime.now().date()
+    nowp = fdr.DataReader('BTC', dated, dated)
+    print(nowp['Close'])
+    #table_btc.append(nowp.Close)    
+    time.sleep(3)
+    i = i+1
