@@ -186,3 +186,5 @@ plt.figure(2)
 plt.figure(3)
 (100 *(Port_dChange -1)).plot(kind ='bar', color = 'orange')      ## Port의 일간수익률(%) , bar차트.
 
+
+
