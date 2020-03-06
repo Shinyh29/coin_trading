@@ -1,0 +1,139 @@
+## --- df 를 파이낸스데이타 리더로 가져온 영한
+from pandas.tseries.offsets import BDay, Day
+import pandas as pd
+import time
+today = pd.datetime.today()
+import FinanceDataReader as fdr
+
+FromDelta = 500
+ticker = 'BTC/KRW'
+
+df = fdr.DataReader(ticker,today-Day(FromDelta),today)
+
+def get_macd(df, short=12, long=26, t=9):
+    # 입력받은 Input값이 pd.DataFrame임을 정의
+    df = pd.DataFrame(df)
+    # MACD 관련수식 _ 만들기
+    # 단기 12일(단기), 26일(장기) _EMA "지수이동평균"
+    ma_12 = df.Close.ewm(span=12).mean()
+    ma_26 = df.Close.ewm(span=26).mean()
+    macd = ma_12 - ma_26
+    #
+    # macd이론의 시그널==macds ?
+    macds = macd.ewm(span=9).mean()
+    # macd 이론의 오실레이터
+    macdo = macd - macds
+    ## Oscillator
+    #
+    df = df.assign(macd=macd, macds=macds, macdo=macdo).dropna()
+    #
+    #
+    return df
+
+def get_macdO_Slope(df):
+    # 입력받은 Input값이 pd.DataFrame임을 정의
+    df = pd.DataFrame(df)
+    macdoSlope = macdo - macdo.lag(1)
+    df = df.assign(macdoSlope=macdoSlope).dropna()
+    return df
+
+df_macdplus = get_macd(df)
+
+
+## -------------------------------------------------------------------------------
+## --------------------Plotly 라이브러리 로 [동적]그래프그리기--------------------
+## -------------------------------------------------------------------------------
+
+from plotly.subplots import make_subplots
+
+import plotly.graph_objs as go
+from plotly.offline import  plot
+#init_notebook_mode(connected=True)
+
+df = df_macdplus
+macdoSlope = df['macdo']-df['macdo'].shift(periods=1)
+import numpy as np
+
+fee = 0.0015
+df['Zeros'] = 0
+#df['Change'] = df['Change']-1
+df['rChange'] = df['Change'] + 1
+df['osc_on'] = np.where(df['macdo'].shift(-1) > df['Zeros'], df['Change']+1-fee, 1)
+df['osc_slope_on'] =np.where(macdoSlope.shift(-1) > df['Zeros'], df['Change']+1-fee, 1)
+df['osc_N_itsSlope'] = np.where((df['macdo'].shift(-1)> df['Zeros']) & ( macdoSlope.shift(-1) > df['Zeros']),df['Change']+1-fee,1)
+df['osc_OR_itsSlope'] = np.where((df['macdo'].shift(-1)> df['Zeros']) | ( macdoSlope.shift(-1) > df['Zeros']),df['Change']+1-fee,1)
+df['Momentum5'] = np.where(df['Close']/df['Close'].shift(+10) > df['rChange'], df['Change']+1-fee, 1)
+
+#df['test'] = np.where(df['osc_on'] >= df['rChange'], 1, 0)
+#rolling_test = df['test'].rolling(window=25).sum()/25 * 100
+#df['rolling25_test'] = rolling_test
+
+# 기본
+df.index, (df['Change']+1).cumprod()
+df['hpr'] = df['osc_on'].cumprod()
+df['hpr2'] = df['rChange'].cumprod()
+
+fig = make_subplots(specs=[[{"secondary_y": True}]])
+fig.add_trace(
+    go.Scatter(
+x = df.index,
+y = df['osc_on'].cumprod(),
+name = "When_osc_on",
+),
+    secondary_y = False
+)
+
+
+fig.add_trace(
+    go.Scatter(
+x = df.index,
+y = df['osc_slope_on'].cumprod(),
+name = "When_osc_slope_on",
+),
+    secondary_y = False
+)
+
+fig.add_trace(
+    go.Scatter(
+x = df.index,
+y = df['rChange'].cumprod(),
+name = "Ticker",
+),
+    secondary_y = False
+)
+
+fig.add_trace(
+    go.Scatter(
+x = df.index,
+y = df['osc_N_itsSlope'].cumprod(),
+name = "osc_N_itsSlope",
+),
+    secondary_y = False
+)
+
+fig.add_trace(
+    go.Scatter(
+x = df.index,
+y = df['osc_OR_itsSlope'].cumprod(),
+name = "osc_OR_itsSlope",
+),
+    secondary_y = False
+)
+
+
+fig.add_trace(
+    go.Scatter(
+x = df.index,
+y = df['Momentum5'].cumprod(),
+name = "Momentum5",
+),
+    secondary_y = False
+)
+
+fig.update_yaxes(title_text="<b>primary</b> yaxis title", secondary_y=False)
+
+
+plot(fig)
+print('Wow')
+df.tail()
+print(len(df))
