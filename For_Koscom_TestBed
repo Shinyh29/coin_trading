@@ -110,13 +110,17 @@ table_Price = pd.DataFrame()
 M_num = 5
 
 
+from pandas.tseries.offsets import BDay, Day
+import time
+today = pd.datetime.today()
+
 ## 두리스트 초기화
 n = 0
 for unit in list(universe.keys()):
     ticker = unit
     n = n+1
     name = universe[ticker]
-    today_macdo_get(ticker,'2017-01')
+    today_macdo_get(ticker,today-Day(150),today)
     #print("---------------------------------------")
 
 
