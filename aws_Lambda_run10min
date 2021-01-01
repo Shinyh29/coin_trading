@@ -1,0 +1,76 @@
+import json
+import pandas as pd	
+import pyupbit 	
+import numpy as np	
+	
+## Error  Ticker 문제 ?	
+	
+def lambda_handler(event, context):	
+    fee = 0	
+    trdMSGs = {}	
+    for ticker in ["KRW-SRN","KRW-PLA","KRW-CVC"]:	
+        try:	
+            df = pyupbit.get_ohlcv(ticker, interval='minute10',count = 20)	
+            # ----------------------Long_LAMBDA	
+            df['Change'] = df['close']/df['close'].shift(1)	
+            df.rename({'open':'Open', 'close':'Close'})	
+            df =df.rename({'open':'Open', 'close':'Close','volume':'Volume'},axis = 'columns')	
+            access_key = 업비트엑세스키
+            secret_key = 업비트시크릿키
+            upbit_api = pyupbit.Upbit(access_key, secret_key)	
+    	
+            def get_macd(df, short=12, long=26, t=9):	
+                df = pd.DataFrame(df)	
+                ma_12 = df.Close.ewm(span= short).mean()	
+                ma_26 = df.Close.ewm(span= long).mean()	
+                macd = ma_12 - ma_26	
+                macds = macd.ewm(span= t).mean()	
+                # macd 이론의 오실레이터	
+                macdo = macd - macds	
+                df = df.assign(macd=macd, macds=macds, macdo=macdo).dropna()	
+                return df	
+	
+            df_macdplus = get_macd(df)	
+            df = df_macdplus	
+            macdoSlope = df['macdo']-df['macdo'].shift(periods=1) 	
+    	
+            df['Zeros'] = 0	
+            df['Change'] = df['Change']-1	
+            df['rChange'] = df['Change'] + 1	
+        	
+            def sell_crypto_currency(ticker):	
+                unit = upbit_api.get_balance(ticker)  ## ticker 의  보유금액	
+                upbit_api.sell_market_order(ticker, unit / 1.2)  ## 보유 ticker의  절반만큼 판다는 겅	
+                print(f'매도금액 : {unit / 2.5}')	
+	
+            #macd_n_slp = np.where((df['macdo'].shift(-1) > df['Zeros']) & (macdoSlope.shift(-1) > df['Zeros']),1 , -1)	
+            #macd_n_slp 수익은 좋은데 거래가 너무없어서  , 분석이힘듦 (백테스팅은 최고급)	
+            macd_n_slp = macdoSlope	
+            n = -1	
+            print(ticker, "---------------")	
+            print(f"df[{n-1}]" , macd_n_slp[n-1])	
+            print(f"df[{n}]" , macd_n_slp[n])	
+            #n = n-1	
+        	
+            # n-2 는 min봉이 완전히 만들어 진 후 	
+            if macd_n_slp[n-3] > 0 and macd_n_slp[n-2] > 0 and macd_n_slp[n-1] <  0 and macd_n_slp[n] <  0 :	
+                sell_crypto_currency(ticker)	
+                trdMSG = f'df[{n-3}]:{macd_n_slp[n-1]},[{n}]:{macd_n_slp[n]}__Sell !'	
+            elif macd_n_slp[n-3] < 0 and macd_n_slp[n-2] < 0 and macd_n_slp[n-1] <  0 and macd_n_slp[n] <  0:	
+                sell_crypto_currency(ticker)	
+                trdMSG = f'df[{n-3}]:{macd_n_slp[n-1]},[{n}]:{macd_n_slp[n]}__isING_Sell !'	
+            else:	
+                trdMSG = f'df[{n-1}]:{macd_n_slp[n-1]},[{n}]:{macd_n_slp[n]}__Hold-!' 	
+                print(macd_n_slp[-4::])	
+                None	
+        	
+            trdMSGs[ticker]= trdMSG	
+            # Send to Telegram :: Layer Size OVER	
+    	
+        except Exception as e:	
+            print(ticker, e)	
+    	
+    return {	
+        'statusCode': 200,	
+        'body': json.dumps(str(trdMSGs))	
+        }	
